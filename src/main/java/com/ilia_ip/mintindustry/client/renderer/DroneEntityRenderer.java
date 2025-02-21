@@ -14,7 +14,7 @@ public class DroneEntityRenderer extends MobRenderer<DroneEntity, DroneEntityMod
             "textures/entity/drone_entity.png");
 
     public DroneEntityRenderer(EntityRendererProvider.Context context) {
-        super(context, new DroneEntityModel(context.bakeLayer(DroneEntityModel.LAYER_LOCATION)), 1.0f);
+        super(context, new DroneEntityModel<>(context.bakeLayer(DroneEntityModel.LAYER_LOCATION)), 1.0f);
     }
 
     @Override
