@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: MOD
+Implementation-Version: 1.0.0
+Specification-Vendor: ilia_ip
+Specification-Title: mintindustry
+Implementation-Timestamp: 2025-02-21T04:50:31+0000
+Specification-Version: 1
+Implementation-Vendor: ilia_ip
+
