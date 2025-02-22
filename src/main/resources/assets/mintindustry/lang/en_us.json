@@ -1,3 +1,5 @@
 {
-    "entity.mintindustry.drone_entity": "Drone"
+    "entity.mintindustry.drone_entity": "Drone",
+    "itemGroup.mintindustry": "MintINDUSTRY",
+    "item.mintindustry.drone_item": "Drone"
 }
