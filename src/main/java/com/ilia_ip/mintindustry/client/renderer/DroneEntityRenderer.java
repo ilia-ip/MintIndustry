@@ -1,8 +1,8 @@
 package com.ilia_ip.mintindustry.client.renderer;
 
-import com.ilia_ip.mintindustry.DroneEntity;
 import com.ilia_ip.mintindustry.MintIndustry;
 import com.ilia_ip.mintindustry.client.model.DroneEntityModel;
+import com.ilia_ip.mintindustry.entities.DroneEntity;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;

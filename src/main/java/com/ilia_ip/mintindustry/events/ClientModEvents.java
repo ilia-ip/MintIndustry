@@ -1,9 +1,9 @@
 package com.ilia_ip.mintindustry.events;
 
-import com.ilia_ip.mintindustry.EntityInit;
 import com.ilia_ip.mintindustry.MintIndustry;
 import com.ilia_ip.mintindustry.client.model.DroneEntityModel;
 import com.ilia_ip.mintindustry.client.renderer.DroneEntityRenderer;
+import com.ilia_ip.mintindustry.entities.EntityInit;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;

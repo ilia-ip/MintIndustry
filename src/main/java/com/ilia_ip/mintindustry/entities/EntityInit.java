@@ -1,4 +1,6 @@
-package com.ilia_ip.mintindustry;
+package com.ilia_ip.mintindustry.entities;
+
+import com.ilia_ip.mintindustry.MintIndustry;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
