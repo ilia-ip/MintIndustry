@@ -5,6 +5,7 @@ package com.ilia_ip.mintindustry.client.model;
 // Paste this class into your mod and generate all required imports
 
 import com.ilia_ip.mintindustry.MintIndustry;
+import com.ilia_ip.mintindustry.entities.DroneEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
@@ -132,7 +133,14 @@ public class DroneEntityModel<T extends Entity> extends EntityModel<T> {
 	@Override
 	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
 			float headPitch) {
+		if (entity instanceof DroneEntity) {
+			DroneEntity drone = (DroneEntity) entity;
 
+			bone.yRot += drone.propellerSpeed;
+			bone2.yRot += drone.propellerSpeed;
+			bone3.yRot += drone.propellerSpeed;
+			bone4.yRot += drone.propellerSpeed;
+		}
 	}
 
 	@Override

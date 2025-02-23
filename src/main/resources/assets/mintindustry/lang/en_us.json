@@ -1,5 +1,7 @@
 {
     "entity.mintindustry.drone_entity": "Drone",
     "itemGroup.mintindustry": "MintINDUSTRY",
-    "item.mintindustry.drone_item": "Drone"
+    "item.mintindustry.drone_item": "Drone",
+    "item.mintindustry.drone_controller": "Drone controller",
+    "sounds.mintindustry.drone_engine_loop": "Drone buzzing"
 }

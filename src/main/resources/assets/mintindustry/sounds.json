@@ -1,0 +1,8 @@
+{
+    "drone_engine_loop": {
+        "subtitle": "sounds.mintindustry.drone_engine_loop",
+        "sounds": [
+            "mintindustry:drone_engine_loop"
+        ]
+    }
+}

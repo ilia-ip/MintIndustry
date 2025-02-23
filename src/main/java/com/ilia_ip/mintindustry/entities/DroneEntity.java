@@ -3,12 +3,16 @@ package com.ilia_ip.mintindustry.entities;
 import java.util.EnumSet;
 import java.util.concurrent.ThreadLocalRandom;
 import com.ilia_ip.mintindustry.items.ItemInit;
+import com.ilia_ip.mintindustry.sounds.SoundInit;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Position;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageEffects;
 import net.minecraft.world.damagesource.DamageScaling;
@@ -29,6 +33,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -36,11 +41,14 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public class DroneEntity extends PathfinderMob implements FlyingAnimal {
     public Player owner = null;
+    public float propellerSpeed = 0;
+
     public static final DamageSource damageSource = new DamageSource(
             Holder.direct(
                     new DamageType("thorns", DamageScaling.NEVER, 3, DamageEffects.THORNS, DeathMessageType.DEFAULT)));
@@ -68,15 +76,35 @@ public class DroneEntity extends PathfinderMob implements FlyingAnimal {
     }
 
     @Override
+    public void tick() {
+        if (this.propellerSpeed < 20) {
+            this.propellerSpeed += 0.2;
+        } else {
+            this.playSound(SoundInit.DRONE_ENGINE_LOOP.get(),
+                    0.10f, 1.0f);
+        }
+        super.tick();
+    }
+
+    public boolean canFly() {
+        return this.propellerSpeed > 18;
+    }
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FollowGoal(this));
+    }
+
+    public static AttributeSupplier.Builder createMobAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0f).add(Attributes.FLYING_SPEED, 3.0f)
+                .add(Attributes.MOVEMENT_SPEED, 0.3f);
     }
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
         Vec3 pos = this.getPosition(0);
         if (source.is(DamageTypes.PLAYER_ATTACK)) {
-            ItemStack items = new ItemStack(ItemInit.DRONE_ITEM.get(), 2);
+            ItemStack items = new ItemStack(ItemInit.DRONE_ITEM.get(), 1);
             this.spawnAtLocation(items);
             for (int i = ThreadLocalRandom.current().nextInt(10, 20); i > 0; i--) {
                 this.level().addParticle(ParticleTypes.SOUL, pos.x, pos.y, pos.z, 0, 0, 0);
@@ -90,6 +118,10 @@ public class DroneEntity extends PathfinderMob implements FlyingAnimal {
             super.actuallyHurt(source, amount / 100);
         }
         return true;
+    }
+
+    @Override
+    protected void doPush(Entity p_20971_) {
     }
 
     @Override
@@ -117,10 +149,6 @@ public class DroneEntity extends PathfinderMob implements FlyingAnimal {
         return false;
     }
 
-    public static AttributeSupplier.Builder createMobAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0f).add(Attributes.FLYING_SPEED, 0.4f);
-    }
-
     @Override
     public void push(double p_20286_, double p_20287_, double p_20288_) {
     }
@@ -132,12 +160,12 @@ public class DroneEntity extends PathfinderMob implements FlyingAnimal {
 }
 
 class FollowGoal extends Goal {
-    protected final PathfinderMob mob;
+    protected final DroneEntity mob;
     protected Player player;
     private boolean isRunning;
     private final Ingredient items;
 
-    public FollowGoal(PathfinderMob mob) {
+    public FollowGoal(DroneEntity mob) {
         this.mob = mob;
         this.items = Ingredient.of(Items.ACACIA_BOAT);
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
@@ -148,12 +176,8 @@ class FollowGoal extends Goal {
             player = this.mob.level().getNearestPlayer(mob, 10.0f);
             return false;
         }
-        return this.player.isHolding(this.items);
+        return this.player.isHolding(this.items) && mob.canFly();
     }
-
-    // public boolean canContinueToUse() {
-    // return this.canUse();
-    // }
 
     public void start() {
         this.isRunning = true;
@@ -164,14 +188,46 @@ class FollowGoal extends Goal {
         this.isRunning = false;
     }
 
+    public double distanceToSqr2D(double x, double z) {
+        double d0 = this.mob.getX() - x;
+        double d2 = this.mob.getZ() - z;
+        return d0 * d0 + d2 * d2;
+    }
+
     public void tick() {
         this.mob.getLookControl().setLookAt(this.player, (float) (this.mob.getMaxHeadYRot() + 20),
                 (float) this.mob.getMaxHeadXRot());
-        if (this.mob.distanceToSqr(this.player) < 3.0D && this.mob.position().y - this.player.position().y == 1) {
+
+        // Actual movement
+        Vec3 playerPos = new Vec3(this.player.getX(), this.player.getY() + 2.0D, this.player.getZ());
+        Vec3 mobPos = this.mob.position();
+
+        boolean isNearPlayer = distanceToSqr2D(playerPos.x, playerPos.z) < 1.5D;
+        boolean isUnderPlayer = mobPos.y - playerPos.y < 0.3D;
+        boolean isHittingPlayer = distanceToSqr2D(playerPos.x, playerPos.z) < 1D;
+
+        // spagetti
+        boolean isBehind = mobPos.x < playerPos.x;
+        boolean isToTheLeft = mobPos.z > playerPos.z;
+        int signX = isBehind ? -1 : 1;
+        int signZ = isToTheLeft ? -1 : 1;
+
+        LogUtils.getLogger().debug("%d, %d, %d, %d, %d | %s, %s", isNearPlayer, isUnderPlayer, isHittingPlayer,
+                isBehind,
+                isToTheLeft, mobPos.toString(), playerPos.toString());
+        ;
+
+        if (isHittingPlayer) {
+            this.mob.getNavigation().moveTo(mobPos.x + (1.5D * signX), playerPos.y + 0.5D, mobPos.z + (1.0 * signZ),
+                    1.5D);
+        } else if (isNearPlayer && !isUnderPlayer) {
             this.mob.getNavigation().stop();
+
+        } else if (isNearPlayer && isUnderPlayer) {
+            this.mob.getNavigation().moveTo(mobPos.x, playerPos.y + 0.5D, mobPos.z, 1.0D);
         } else {
-            Vec3 pos = this.player.position();
-            this.mob.getNavigation().moveTo(pos.x, pos.y + 2, pos.z, 1.0D);
+            this.mob.getNavigation().moveTo(playerPos.x + (1.5D * signX), playerPos.y + 0.5D,
+                    playerPos.z + (1.5D * signZ), 1.0D);
         }
 
     }
