@@ -2,6 +2,9 @@ package com.ilia_ip.mintindustry.entities;
 
 import java.util.EnumSet;
 import java.util.concurrent.ThreadLocalRandom;
+
+import org.antlr.v4.parse.ANTLRParser.prequelConstruct_return;
+
 import com.ilia_ip.mintindustry.items.ItemInit;
 import com.ilia_ip.mintindustry.sounds.SoundInit;
 import com.mojang.logging.LogUtils;
@@ -20,6 +23,9 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.damagesource.DeathMessageType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -32,8 +38,6 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -41,13 +45,13 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public class DroneEntity extends PathfinderMob implements FlyingAnimal {
     public Player owner = null;
     public float propellerSpeed = 0;
+    public DroneTasks currentTask;
 
     public static final DamageSource damageSource = new DamageSource(
             Holder.direct(
@@ -64,7 +68,8 @@ public class DroneEntity extends PathfinderMob implements FlyingAnimal {
             MobSpawnType spawnType, SpawnGroupData spawnData, CompoundTag compound) {
 
         owner = server.getLevel().getNearestPlayer(this, 10.0d);
-        return super.finalizeSpawn(server, difficulty, spawnType, spawnData, compound);
+        currentTask = DroneTasks.FOLLOWING_PLAYER;
+        return spawnData;
     }
 
     protected PathNavigation createNavigation(Level level) {
@@ -129,6 +134,22 @@ public class DroneEntity extends PathfinderMob implements FlyingAnimal {
         entity.hurt(damageSource, 1.0f);
     }
 
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        owner = this.level().getPlayerByUUID(tag.getUUID("owner_uuid"));
+        propellerSpeed = tag.getFloat("propeller_speed");
+        currentTask = DroneTasks.values()[tag.getInt("drone_task")];
+        super.readAdditionalSaveData(tag);
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        tag.putUUID("owner_uuid", owner.getUUID());
+        tag.putFloat("propeller_speed", propellerSpeed);
+        tag.putInt("drone_task", currentTask.value);
+        super.addAdditionalSaveData(tag);
+    }
+
     // ========================= ETC ============================
 
     @Override
@@ -159,24 +180,33 @@ public class DroneEntity extends PathfinderMob implements FlyingAnimal {
     }
 }
 
+enum DroneTasks {
+    IDLE(0),
+    FOLLOWING_PLAYER(1);
+
+    public int value;
+
+    private DroneTasks(int value) {
+        this.value = value;
+    }
+}
+
 class FollowGoal extends Goal {
     protected final DroneEntity mob;
     protected Player player;
     private boolean isRunning;
-    private final Ingredient items;
 
     public FollowGoal(DroneEntity mob) {
         this.mob = mob;
-        this.items = Ingredient.of(Items.ACACIA_BOAT);
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
     public boolean canUse() {
-        if (player == null) {
-            player = this.mob.level().getNearestPlayer(mob, 10.0f);
+        this.player = mob.owner;
+        if (player == null || !mob.canFly()) {
             return false;
         }
-        return this.player.isHolding(this.items) && mob.canFly();
+        return mob.currentTask == DroneTasks.FOLLOWING_PLAYER;
     }
 
     public void start() {
