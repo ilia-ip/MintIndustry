@@ -5,7 +5,7 @@ package com.ilia_ip.mintindustry.client.model;
 // Paste this class into your mod and generate all required imports
 
 import com.ilia_ip.mintindustry.MintIndustry;
-import com.ilia_ip.mintindustry.entities.DroneEntity;
+import com.ilia_ip.mintindustry.entities.drone.DroneEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 

@@ -1,8 +1,8 @@
 package com.ilia_ip.mintindustry.events;
 
 import com.ilia_ip.mintindustry.MintIndustry;
-import com.ilia_ip.mintindustry.entities.DroneEntity;
-import com.ilia_ip.mintindustry.entities.EntityInit;
+import com.ilia_ip.mintindustry.entities.ModEntities;
+import com.ilia_ip.mintindustry.entities.drone.DroneEntity;
 
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 public class CommonModEvents {
     @SubscribeEvent
     public static void entityAttributes(EntityAttributeCreationEvent event) {
-        event.put(EntityInit.DRONE_ENTITY.get(), DroneEntity.createMobAttributes().build());
+        event.put(ModEntities.DRONE_ENTITY.get(), DroneEntity.createMobAttributes().build());
     }
 
     /*

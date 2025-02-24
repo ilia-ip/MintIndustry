@@ -125,12 +125,23 @@ repositories {
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so.
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html#sub:flat_dir_resolver
-    // flatDir {
-    //     dir 'libs'
-    // }
+    mavenLocal()
+    flatDir {
+         dir 'libs'
+    }
     maven {
         name = "Illusive Soulworks maven"
         url = "https://maven.theillusivec4.top/"
+    }
+
+    maven {
+        name = "MrCrayfish (GitHub)"
+        url = "https://maven.pkg.github.com/MrCrayfish/Maven"
+        credentials {
+            // For your security, retrieve these from a non-public file or environment variable
+            username = "ilia-ip"
+            password = "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"
+        }
     }
 }
 
@@ -141,8 +152,14 @@ dependencies {
     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api")
+
+    compileOnly fg.deobf("com.mrcrayfish:refurbished_furniture-forge-${minecraft_version}:${furniture_version}")
+    compileOnly fg.deobf("com.mrcrayfish:refurbished_furniture-common-${minecraft_version}:${furniture_version}")
+    runtimeOnly fg.deobf("com.mrcrayfish:refurbished_furniture-forge-${minecraft_version}:${furniture_version}")
+    //implementation fg.deobf("com.mrcrayfish:refurbished-furniture-forge-${minecraft_version}:${furniture_version}")
     // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
@@ -155,7 +172,7 @@ dependencies {
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
 
     // For more info:
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+    // http://www.graDle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
