@@ -2,16 +2,21 @@ package com.ilia_ip.mintindustry.blocks.entities;
 
 
 
+import com.ilia_ip.mintindustry.util.Owner;
 import com.mrcrayfish.furniture.refurbished.blockentity.ElectricityModuleBlockEntity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 public class DroneStationEntity extends ElectricityModuleBlockEntity {
+    public Player owner;
+
     public DroneStationEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlockEntities.DRONE_STATION_ENTITY.get(), blockPos, blockState);
+        //owner = Owner.getOwner(this.getLevel(), blockPos);
     }   
 
     @Override

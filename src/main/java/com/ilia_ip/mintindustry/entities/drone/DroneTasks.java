@@ -1,14 +1,30 @@
 package com.ilia_ip.mintindustry.entities.drone;
 
 import java.util.EnumSet;
+import java.util.stream.Stream;
 
+import org.antlr.v4.parse.ANTLRParser.blockEntry_return;
+
+import com.ilia_ip.mintindustry.blocks.entities.ModBlockEntities;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.PoiTypeTags;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.village.poi.PoiManager;
+import net.minecraft.world.entity.ai.village.poi.PoiRecord;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.ai.village.poi.PoiTypes;
+import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 
 public enum DroneTasks {
     IDLE(0),
-    FOLLOWING_PLAYER(1);
+    FOLLOWING_PLAYER(1),
+    RECHARGING(2);
 
     public int value;
 
@@ -17,10 +33,33 @@ public enum DroneTasks {
     }
 }
 
+class RechargeGoal extends Goal {
+    protected final DroneEntity mob;
+    protected BlockPos stationPos;
+
+    public RechargeGoal(DroneEntity mob) {
+        this.mob = mob;
+        this.setFlags(EnumSet.of(Goal.Flag.LOOK, Goal.Flag.MOVE));
+    }
+    
+    
+    @Override
+    public boolean canUse() {
+        if (!mob.canFly()) {
+            return false;
+        }
+        return mob.currentTask == DroneTasks.RECHARGING;
+    }
+
+    @Override
+    public void tick() {
+         
+    }
+}
+
 class FollowGoal extends Goal {
     protected final DroneEntity mob;
     protected Player player;
-    private boolean isRunning;
 
     public FollowGoal(DroneEntity mob) {
         this.mob = mob;
@@ -35,14 +74,6 @@ class FollowGoal extends Goal {
         return mob.currentTask == DroneTasks.FOLLOWING_PLAYER;
     }
 
-    public void start() {
-        this.isRunning = true;
-    }
-
-    public void stop() {
-        this.mob.getNavigation().stop();
-        this.isRunning = false;
-    }
 
     public double distanceToSqr2D(double x, double z) {
         double d0 = this.mob.getX() - x;
@@ -81,9 +112,5 @@ class FollowGoal extends Goal {
                     playerPos.z + (1.5D * signZ), 1.0D);
         }
 
-    }
-
-    public boolean isRunning() {
-        return this.isRunning;
     }
 }

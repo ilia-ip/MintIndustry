@@ -3,6 +3,7 @@ package com.ilia_ip.mintindustry.items;
 import java.util.List;
 
 import com.ilia_ip.mintindustry.MintIndustry;
+import com.ilia_ip.mintindustry.blocks.DroneStation;
 import com.ilia_ip.mintindustry.entities.drone.DroneEntity;
 import com.ilia_ip.mintindustry.keybindings.ModKeybindings;
 
@@ -26,6 +27,7 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 public class DroneController extends Item implements ICurioItem {
     List<DroneEntity> drones;
+    List<DroneStation> stations;
 
     public DroneController() {
         super(new Item.Properties().fireResistant().stacksTo(1).rarity(Rarity.EPIC));
@@ -42,6 +44,8 @@ public class DroneController extends Item implements ICurioItem {
 
             @Override
             public void curioTick(SlotContext slotContext) {
+                if (stations == null) {
+                }
                 if (drones == null) {
                     List<DroneEntity> allDrones = slotContext.entity().level().getEntities(
                             EntityTypeTest.forClass(DroneEntity.class),
