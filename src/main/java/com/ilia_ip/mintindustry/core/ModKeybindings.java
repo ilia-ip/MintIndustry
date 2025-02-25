@@ -1,4 +1,4 @@
-package com.ilia_ip.mintindustry.keybindings;
+package com.ilia_ip.mintindustry.core;
 
 import com.ilia_ip.mintindustry.MintIndustry;
 import com.mojang.blaze3d.platform.InputConstants;

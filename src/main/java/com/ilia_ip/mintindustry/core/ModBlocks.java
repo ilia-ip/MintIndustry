@@ -1,6 +1,7 @@
-package com.ilia_ip.mintindustry.blocks;
+package com.ilia_ip.mintindustry.core;
 
 import com.ilia_ip.mintindustry.MintIndustry;
+import com.ilia_ip.mintindustry.blocks.DroneStation;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;

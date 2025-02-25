@@ -2,8 +2,8 @@ package com.ilia_ip.mintindustry.entities.drone;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.ilia_ip.mintindustry.items.ModItems;
-import com.ilia_ip.mintindustry.sounds.ModSounds;
+import com.ilia_ip.mintindustry.core.ModItems;
+import com.ilia_ip.mintindustry.core.ModSounds;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;

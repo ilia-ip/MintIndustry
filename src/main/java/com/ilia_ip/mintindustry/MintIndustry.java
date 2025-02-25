@@ -1,10 +1,11 @@
 package com.ilia_ip.mintindustry;
 
-import com.ilia_ip.mintindustry.blocks.ModBlocks;
-import com.ilia_ip.mintindustry.blocks.entities.ModBlockEntities;
-import com.ilia_ip.mintindustry.entities.ModEntities;
-import com.ilia_ip.mintindustry.items.ModItems;
-import com.ilia_ip.mintindustry.sounds.ModSounds;
+import com.ilia_ip.mintindustry.core.ModBlockEntities;
+import com.ilia_ip.mintindustry.core.ModBlocks;
+import com.ilia_ip.mintindustry.core.ModEntities;
+import com.ilia_ip.mintindustry.core.ModItems;
+import com.ilia_ip.mintindustry.core.ModSounds;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;

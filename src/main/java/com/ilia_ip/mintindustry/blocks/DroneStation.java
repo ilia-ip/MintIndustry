@@ -1,6 +1,6 @@
 package com.ilia_ip.mintindustry.blocks;
 
-import com.ilia_ip.mintindustry.blocks.entities.ModBlockEntities;
+import com.ilia_ip.mintindustry.core.ModBlockEntities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;

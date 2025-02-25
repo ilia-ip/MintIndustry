@@ -1,5 +1,6 @@
-package com.ilia_ip.mintindustry.blocks.entities;
+package com.ilia_ip.mintindustry.blockentities;
 
+import com.ilia_ip.mintindustry.core.ModBlockEntities;
 import com.mrcrayfish.furniture.refurbished.blockentity.ElectricityModuleBlockEntity;
 
 import net.minecraft.core.BlockPos;

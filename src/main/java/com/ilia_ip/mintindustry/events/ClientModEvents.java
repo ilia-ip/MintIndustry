@@ -1,10 +1,10 @@
 package com.ilia_ip.mintindustry.events;
 
 import com.ilia_ip.mintindustry.MintIndustry;
-import com.ilia_ip.mintindustry.blocks.entities.ModBlockEntities;
 import com.ilia_ip.mintindustry.client.model.DroneEntityModel;
 import com.ilia_ip.mintindustry.client.renderer.DroneEntityRenderer;
-import com.ilia_ip.mintindustry.entities.ModEntities;
+import com.ilia_ip.mintindustry.core.ModBlockEntities;
+import com.ilia_ip.mintindustry.core.ModEntities;
 import com.mrcrayfish.furniture.refurbished.client.renderer.blockentity.ElectricBlockEntityRenderer;
 
 import net.minecraftforge.api.distmarker.Dist;

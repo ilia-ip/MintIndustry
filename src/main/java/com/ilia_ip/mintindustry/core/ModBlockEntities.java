@@ -1,8 +1,8 @@
-package com.ilia_ip.mintindustry.blocks.entities;
+package com.ilia_ip.mintindustry.core;
 
 
 import com.ilia_ip.mintindustry.MintIndustry;
-import com.ilia_ip.mintindustry.blocks.ModBlocks;
+import com.ilia_ip.mintindustry.blockentities.DroneStationEntity;
 
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;

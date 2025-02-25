@@ -1,7 +1,7 @@
 package com.ilia_ip.mintindustry.events;
 
 import com.ilia_ip.mintindustry.MintIndustry;
-import com.ilia_ip.mintindustry.entities.ModEntities;
+import com.ilia_ip.mintindustry.core.ModEntities;
 import com.ilia_ip.mintindustry.entities.drone.DroneEntity;
 
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;

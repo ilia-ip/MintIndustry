@@ -1,8 +1,7 @@
-package com.ilia_ip.mintindustry.items;
+package com.ilia_ip.mintindustry.core;
 
 import com.ilia_ip.mintindustry.MintIndustry;
-import com.ilia_ip.mintindustry.blocks.ModBlocks;
-import com.ilia_ip.mintindustry.entities.ModEntities;
+import com.ilia_ip.mintindustry.items.DroneController;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;

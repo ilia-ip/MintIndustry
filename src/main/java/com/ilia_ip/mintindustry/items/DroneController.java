@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.ilia_ip.mintindustry.MintIndustry;
 import com.ilia_ip.mintindustry.blocks.DroneStation;
+import com.ilia_ip.mintindustry.core.ModKeybindings;
 import com.ilia_ip.mintindustry.entities.drone.DroneEntity;
-import com.ilia_ip.mintindustry.keybindings.ModKeybindings;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;

@@ -1,7 +1,7 @@
 package com.ilia_ip.mintindustry.client.handler;
 
 import com.ilia_ip.mintindustry.MintIndustry;
-import com.ilia_ip.mintindustry.keybindings.ModKeybindings;
+import com.ilia_ip.mintindustry.core.ModKeybindings;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
