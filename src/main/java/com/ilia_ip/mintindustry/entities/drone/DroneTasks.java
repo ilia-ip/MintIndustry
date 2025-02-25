@@ -1,24 +1,9 @@
 package com.ilia_ip.mintindustry.entities.drone;
 
 import java.util.EnumSet;
-import java.util.stream.Stream;
-
-import org.antlr.v4.parse.ANTLRParser.blockEntry_return;
-
-import com.ilia_ip.mintindustry.blocks.entities.ModBlockEntities;
-
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.PoiTypeTags;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.village.poi.PoiManager;
-import net.minecraft.world.entity.ai.village.poi.PoiRecord;
-import net.minecraft.world.entity.ai.village.poi.PoiType;
-import net.minecraft.world.entity.ai.village.poi.PoiTypes;
-import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 
 public enum DroneTasks {

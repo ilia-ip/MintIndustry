@@ -18,6 +18,6 @@ public class ModEntities {
         public static final RegistryObject<EntityType<DroneEntity>> DRONE_ENTITY = ENTITIES.register("drone_entity",
                         () -> EntityType.Builder.of(DroneEntity::new, MobCategory.CREATURE).fireImmune()
                                         .sized(1.0f, 0.5f)
-                                        .build(new ResourceLocation(MintIndustry.MODID,
+                                        .build(ResourceLocation.tryBuild(MintIndustry.MODID,
                                                         "drone_entity").toString()));
 }

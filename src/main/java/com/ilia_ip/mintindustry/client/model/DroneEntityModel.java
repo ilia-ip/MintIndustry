@@ -25,7 +25,7 @@ public class DroneEntityModel<T extends Entity> extends EntityModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in
 	// the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-			new ResourceLocation(MintIndustry.MODID, "drone_entity"), "main");
+			ResourceLocation.tryBuild(MintIndustry.MODID, "drone_entity"), "main");
 	private final ModelPart bone;
 	private final ModelPart bone2;
 	private final ModelPart bone3;
@@ -40,6 +40,7 @@ public class DroneEntityModel<T extends Entity> extends EntityModel<T> {
 		this.bb_main = root.getChild("bb_main");
 	}
 
+	@SuppressWarnings("unused")
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();

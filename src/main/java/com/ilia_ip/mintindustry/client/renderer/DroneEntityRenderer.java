@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class DroneEntityRenderer extends MobRenderer<DroneEntity, DroneEntityModel<DroneEntity>> {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(MintIndustry.MODID,
+    public static final ResourceLocation TEXTURE = ResourceLocation.tryBuild(MintIndustry.MODID,
             "textures/entity/drone_entity.png");
 
     public DroneEntityRenderer(EntityRendererProvider.Context context) {

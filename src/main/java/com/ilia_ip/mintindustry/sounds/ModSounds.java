@@ -14,6 +14,6 @@ public class ModSounds {
 
         public static final RegistryObject<SoundEvent> DRONE_ENGINE_LOOP = SOUNDS.register("drone_engine_loop",
                         () -> SoundEvent.createVariableRangeEvent(
-                                        new ResourceLocation(MintIndustry.MODID,
+                                        ResourceLocation.tryBuild(MintIndustry.MODID,
                                                         "drone_engine_loop")));
 }

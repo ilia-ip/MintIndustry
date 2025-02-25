@@ -15,6 +15,7 @@ public class MintIndustry {
     public static final String MODID = "mintindustry";
 
     public MintIndustry() {
+        @SuppressWarnings("all")
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         MinecraftForge.EVENT_BUS.register(this);

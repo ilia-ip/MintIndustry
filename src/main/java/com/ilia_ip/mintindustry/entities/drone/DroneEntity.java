@@ -2,7 +2,6 @@ package com.ilia_ip.mintindustry.entities.drone;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.ilia_ip.mintindustry.blocks.entities.DroneStationEntity;
 import com.ilia_ip.mintindustry.items.ModItems;
 import com.ilia_ip.mintindustry.sounds.ModSounds;
 
