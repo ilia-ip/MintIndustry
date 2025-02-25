@@ -12,6 +12,6 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MintIndustry.MODID);
 
-    public static final RegistryObject<BlockEntityType<DroneStationEntity>> DRONE_STATION_ENTITY = BLOCK_ENTITIES.register("drone_station", 
+    public static final RegistryObject<BlockEntityType<DroneStationEntity>> DRONE_STATION_ENTITY = BLOCK_ENTITIES.register("drone_station_entity", 
             () -> BlockEntityType.Builder.of(DroneStationEntity::new, ModBlocks.DRONE_STATION.get()).build(null));
 }

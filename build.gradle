@@ -134,15 +134,7 @@ repositories {
         url = "https://maven.theillusivec4.top/"
     }
 
-    maven {
-        name = "MrCrayfish (GitHub)"
-        url = "https://maven.pkg.github.com/MrCrayfish/Maven"
-        credentials {
-            // For your security, retrieve these from a non-public file or environment variable
-            username = "ilia-ip"
-            password = "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"
-        }
-    }
+    // Yep, i leaked my github acess token...
 }
 
 dependencies {

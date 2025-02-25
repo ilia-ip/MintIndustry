@@ -1,9 +1,11 @@
 package com.ilia_ip.mintindustry.items;
 
 import com.ilia_ip.mintindustry.MintIndustry;
+import com.ilia_ip.mintindustry.blocks.ModBlocks;
 import com.ilia_ip.mintindustry.entities.ModEntities;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -25,11 +27,14 @@ public class ModItems {
         public static final RegistryObject<Item> DRONE_CONTROLLER = ITEMS.register("drone_controller",
                         () -> new DroneController());
 
+        public static final RegistryObject<BlockItem> DRONE_STATION_ITEM = ITEMS.register("drone_station", () -> new BlockItem(ModBlocks.DRONE_STATION.get(), new Item.Properties()));
+
         public static final RegistryObject<CreativeModeTab> CREATIVE_TAB = CREATIVE_MODE_TABS.register("mintidustry",
                         () -> CreativeModeTab.builder()
                                         .icon(() -> DRONE_ITEM.get().getDefaultInstance())
                                         .displayItems((parameters, output) -> {
                                                 output.accept(DRONE_ITEM.get());
                                                 output.accept(DRONE_CONTROLLER.get());
+                                                output.accept(DRONE_STATION_ITEM.get());
                                         }).build());
 }

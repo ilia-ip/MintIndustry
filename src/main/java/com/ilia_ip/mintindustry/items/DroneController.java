@@ -58,6 +58,9 @@ public class DroneController extends Item implements ICurioItem {
                     }
                 }
                 slotContext.entity().addEffect(new MobEffectInstance(MobEffects.BAD_OMEN));
+                
+                
+                
             }
         });
     }
