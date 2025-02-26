@@ -1,10 +1,7 @@
 package com.ilia_ip.mintindustry.client.model;
 // Made with Blockbench 4.11.2
 
-// Exported for Minecraft version 1.17 or later with Mojang mappings
-// Paste this class into your mod and generate all required imports
-
-import com.ilia_ip.mintindustry.MintIndustry;
+import com.ilia_ip.mintindustry.core.MintIndustry;
 import com.ilia_ip.mintindustry.entities.drone.DroneEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

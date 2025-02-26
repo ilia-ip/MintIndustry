@@ -1,62 +1,29 @@
-package com.ilia_ip.mintindustry.entities.drone;
+package com.ilia_ip.mintindustry.entities.drone.tasks;
 
 import java.util.EnumSet;
-import net.minecraft.core.BlockPos;
+
+import com.ilia_ip.mintindustry.entities.drone.DroneEntity;
+import com.ilia_ip.mintindustry.entities.drone.DroneTask;
+
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
-public enum DroneTasks {
-    IDLE(0),
-    FOLLOWING_PLAYER(1),
-    RECHARGING(2);
-
-    public int value;
-
-    private DroneTasks(int value) {
-        this.value = value;
-    }
-}
-
-class RechargeGoal extends Goal {
-    protected final DroneEntity mob;
-    protected BlockPos stationPos;
-
-    public RechargeGoal(DroneEntity mob) {
-        this.mob = mob;
-        this.setFlags(EnumSet.of(Goal.Flag.LOOK, Goal.Flag.MOVE));
-    }
-    
-    
-    @Override
-    public boolean canUse() {
-        if (!mob.canFly()) {
-            return false;
-        }
-        return mob.currentTask == DroneTasks.RECHARGING;
-    }
-
-    @Override
-    public void tick() {
-         
-    }
-}
-
-class FollowGoal extends Goal {
+public class FollowOwnerTask extends Goal {
     protected final DroneEntity mob;
     protected Player player;
 
-    public FollowGoal(DroneEntity mob) {
+    public FollowOwnerTask(DroneEntity mob) {
         this.mob = mob;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
     public boolean canUse() {
-        this.player = mob.owner;
+        this.player = mob.owner.getPlayer();
         if (player == null || !mob.canFly()) {
             return false;
         }
-        return mob.currentTask == DroneTasks.FOLLOWING_PLAYER;
+        return mob.currentTask == DroneTask.FOLLOWING_PLAYER;
     }
 
 

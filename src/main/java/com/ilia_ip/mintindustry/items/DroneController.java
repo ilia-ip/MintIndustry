@@ -2,10 +2,11 @@ package com.ilia_ip.mintindustry.items;
 
 import java.util.List;
 
-import com.ilia_ip.mintindustry.MintIndustry;
 import com.ilia_ip.mintindustry.blocks.DroneStation;
+import com.ilia_ip.mintindustry.core.MintIndustry;
 import com.ilia_ip.mintindustry.core.ModKeybindings;
 import com.ilia_ip.mintindustry.entities.drone.DroneEntity;
+import com.ilia_ip.mintindustry.entities.drone.DroneTask;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -55,11 +56,19 @@ public class DroneController extends Item implements ICurioItem {
                             drones.add(drone);
                         }
                     }
-                    if (ModKeybindings.INSTANCE.controllerMenuKey.isDown()) {
-                        ModKeybindings.INSTANCE.controllerMenuKey.consumeClick();
+                }
+                if (drones == null) {
+                    return;
+                }
+                for (DroneEntity drone : drones) {
+                    drone.setTask(DroneTask.FOLLOWING_PLAYER);
+                }
 
-                        Minecraft.getInstance().setScreen(new DroneControllerScreen());
-                    }
+                if (ModKeybindings.INSTANCE.controllerMenuKey.isDown()) {
+                    ModKeybindings.INSTANCE.controllerMenuKey.consumeClick();
+
+                    Minecraft.getInstance().setScreen(new DroneControllerScreen());
+
                 }
                 slotContext.entity().addEffect(new MobEffectInstance(MobEffects.BAD_OMEN));
                 
@@ -76,4 +85,6 @@ class DroneControllerScreen extends Screen {
     public DroneControllerScreen() {
         super(TITLE);
     }
+
+
 }

@@ -1,7 +1,5 @@
 package com.ilia_ip.mintindustry.core;
 
-import com.ilia_ip.mintindustry.MintIndustry;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.DeferredRegister;

@@ -1,6 +1,6 @@
 package com.ilia_ip.mintindustry.client.handler;
 
-import com.ilia_ip.mintindustry.MintIndustry;
+import com.ilia_ip.mintindustry.core.MintIndustry;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;

@@ -1,8 +1,8 @@
 package com.ilia_ip.mintindustry.events;
 
-import com.ilia_ip.mintindustry.MintIndustry;
 import com.ilia_ip.mintindustry.client.model.DroneEntityModel;
 import com.ilia_ip.mintindustry.client.renderer.DroneEntityRenderer;
+import com.ilia_ip.mintindustry.core.MintIndustry;
 import com.ilia_ip.mintindustry.core.ModBlockEntities;
 import com.ilia_ip.mintindustry.core.ModEntities;
 import com.mrcrayfish.furniture.refurbished.client.renderer.blockentity.ElectricBlockEntityRenderer;
