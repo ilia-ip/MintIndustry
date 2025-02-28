@@ -18,12 +18,17 @@ public class DroneOwner {
 
     public static <T extends Entity> DroneOwner getOwner(Level level, T entity) {
 
-        return new DroneOwner(level.getNearestPlayer(entity, range));
+        return getOwner(level, entity.getX(), entity.getY(), entity.getZ());
     }
 
     public static DroneOwner getOwner(Level level, BlockPos position) {
-        return new DroneOwner(level.getNearestPlayer(position.getX(), position.getY(), position.getZ(), range, null));
+        return getOwner(level, position.getX(), position.getY(), position.getZ());
     }
+
+    public static DroneOwner getOwner(Level level, double x, double y, double z) {
+        return new DroneOwner(level.getNearestPlayer(x, y, z, range, false));
+    }
+
 
     public static DroneOwner byUUID(Level level, UUID uuid) {
         return new DroneOwner(level.getPlayerByUUID(uuid));

@@ -31,4 +31,8 @@ public class DroneStationEntity extends ElectricityModuleBlockEntity {
             this.level.setBlock(this.worldPosition, state.setValue(BlockStateProperties.POWERED, powered), Block.UPDATE_ALL);
         }
     }
+
+    public boolean isFull() {
+        return false;
+    }
 }

@@ -53,7 +53,7 @@ public class FollowOwnerTask extends Goal {
 
         if (isHittingPlayer) {
             this.mob.getNavigation().moveTo(mobPos.x + (1.5D * signX), playerPos.y + 0.5D, mobPos.z + (1.0 * signZ),
-                    1.5D);
+                    1.0D);
         } else if (isNearPlayer && !isUnderPlayer) {
             this.mob.getNavigation().stop();
 

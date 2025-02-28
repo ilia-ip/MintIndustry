@@ -10,14 +10,13 @@ import com.ilia_ip.mintindustry.entities.drone.DroneTask;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -43,37 +42,29 @@ public class DroneController extends Item implements ICurioItem {
                 return stack;
             }
 
+            /*
+             * asdasdssa i hate BouningBox.infinite()
+             */
             @Override
             public void curioTick(SlotContext slotContext) {
-                if (stations == null) {
-                }
-                if (drones == null) {
-                    List<DroneEntity> allDrones = slotContext.entity().level().getEntities(
-                            EntityTypeTest.forClass(DroneEntity.class),
-                            AABB.of(BoundingBox.infinite()), null);
-                    for (DroneEntity drone : allDrones) {
-                        if (drone.owner.getUUID() == slotContext.entity().getUUID()) {
-                            drones.add(drone);
-                        }
-                    }
-                }
-                if (drones == null) {
-                    return;
-                }
+                drones = slotContext.entity().level().getNearbyEntities(DroneEntity.class, TargetingConditions.DEFAULT, slotContext.entity(), AABB.of(BoundingBox.fromCorners(
+                            new Vec3i((int)slotContext.entity().getX()-100,(int)slotContext.entity().getY()-100,(int)slotContext.entity().getZ()-100), 
+                            new Vec3i((int)slotContext.entity().getX()+100, (int)slotContext.entity().getY()+100, (int)slotContext.entity().getZ()+100))));
+                 
                 for (DroneEntity drone : drones) {
                     drone.setTask(DroneTask.FOLLOWING_PLAYER);
+                    if (true) {
+                        drone.setTask(DroneTask.RECHARGING);
+                    }
                 }
 
+                // TO_BE_REMOVED
                 if (ModKeybindings.INSTANCE.controllerMenuKey.isDown()) {
                     ModKeybindings.INSTANCE.controllerMenuKey.consumeClick();
 
                     Minecraft.getInstance().setScreen(new DroneControllerScreen());
 
-                }
-                slotContext.entity().addEffect(new MobEffectInstance(MobEffects.BAD_OMEN));
-                
-                
-                
+                } 
             }
         });
     }
