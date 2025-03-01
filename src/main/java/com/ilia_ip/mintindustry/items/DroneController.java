@@ -6,7 +6,7 @@ import com.ilia_ip.mintindustry.blocks.DroneStation;
 import com.ilia_ip.mintindustry.core.MintIndustry;
 import com.ilia_ip.mintindustry.core.ModKeybindings;
 import com.ilia_ip.mintindustry.entities.drone.DroneEntity;
-import com.ilia_ip.mintindustry.entities.drone.DroneTask;
+import com.ilia_ip.mintindustry.entities.drone.DroneTasks;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -52,9 +52,9 @@ public class DroneController extends Item implements ICurioItem {
                             new Vec3i((int)slotContext.entity().getX()+100, (int)slotContext.entity().getY()+100, (int)slotContext.entity().getZ()+100))));
                  
                 for (DroneEntity drone : drones) {
-                    drone.setTask(DroneTask.FOLLOWING_PLAYER);
+                    drone.setTask(DroneTasks.FOLLOWING_PLAYER);
                     if (true) {
-                        drone.setTask(DroneTask.RECHARGING);
+                        drone.setTask(DroneTasks.RECHARGING);
                     }
                 }
 

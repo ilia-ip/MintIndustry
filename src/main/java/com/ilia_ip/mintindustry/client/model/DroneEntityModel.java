@@ -132,12 +132,12 @@ public class DroneEntityModel<T extends Entity> extends EntityModel<T> {
 	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
 			float headPitch) {
 		if (entity instanceof DroneEntity) {
-			DroneEntity drone = (DroneEntity) entity;
+			float propellerSpeed = ((DroneEntity)entity).getPropellerSpeed();
 
-			bone.yRot += drone.propellerSpeed;
-			bone2.yRot += drone.propellerSpeed;
-			bone3.yRot += drone.propellerSpeed;
-			bone4.yRot += drone.propellerSpeed;
+			bone.yRot += propellerSpeed;
+			bone2.yRot += propellerSpeed;
+			bone3.yRot += propellerSpeed;
+			bone4.yRot += propellerSpeed;
 		}
 	}
 

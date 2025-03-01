@@ -1,13 +1,22 @@
 package com.ilia_ip.mintindustry.entities.drone;
 
-public enum DroneTask {
-    IDLE(0),
-    FOLLOWING_PLAYER(1),
-    RECHARGING(2);
+public abstract class DroneTask {
+    protected DroneTasks TYPE;
+    protected final DroneEntity drone;
+    public final int PRIORITY;
 
-    public int value;
-
-    private DroneTask(int value) {
-        this.value = value;
+    public DroneTask(DroneEntity drone, int priority) {
+        this.drone = drone;
+        this.PRIORITY = priority;
     }
+
+    public boolean canContinueToUse(DroneTasks task) {
+        return this.canUse(task);
+    }
+
+    public boolean canUse(DroneTasks task) {
+        return task == this.TYPE && this.drone.canFly();
+    }
+
+    public abstract void tick();
 }

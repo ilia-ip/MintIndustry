@@ -16,7 +16,10 @@ public class DroneOwner {
         this.player = player;
     }
 
-    public static <T extends Entity> DroneOwner getOwner(Level level, T entity) {
+    /*
+     * Wrappers for getting owner from level and coordinates
+     */
+    public static DroneOwner getOwner(Level level, Entity entity) {
 
         return getOwner(level, entity.getX(), entity.getY(), entity.getZ());
     }
@@ -42,8 +45,7 @@ public class DroneOwner {
         return this.player;
     }
 
-    @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Entity obj) {
         if (obj instanceof Player) {
             return ((Player)obj).getUUID().equals(this.player.getUUID());
         } else {

@@ -1,49 +1,41 @@
 package com.ilia_ip.mintindustry.entities.drone.tasks;
 
-import java.util.EnumSet;
-
 import com.ilia_ip.mintindustry.entities.drone.DroneEntity;
 import com.ilia_ip.mintindustry.entities.drone.DroneTask;
+import com.ilia_ip.mintindustry.entities.drone.DroneTasks;
+import com.ilia_ip.mintindustry.util.DroneUtils;
 
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
-public class FollowOwnerTask extends Goal {
-    protected final DroneEntity mob;
-    protected Player player;
+/*
+ * Default drone task
+ * Drone just follows its owner 
+ */
+public class FollowOwnerTask extends DroneTask {
 
-    public FollowOwnerTask(DroneEntity mob) {
-        this.mob = mob;
-        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+    public FollowOwnerTask(DroneEntity drone) {
+        super(drone, 1);
+        this.TYPE = DroneTasks.FOLLOWING_PLAYER;
     }
 
-    public boolean canUse() {
-        this.player = mob.owner.getPlayer();
-        if (player == null || !mob.canFly()) {
-            return false;
-        }
-        return mob.currentTask == DroneTask.FOLLOWING_PLAYER;
-    }
-
-
-    public double distanceToSqr2D(double x, double z) {
-        double d0 = this.mob.getX() - x;
-        double d2 = this.mob.getZ() - z;
-        return d0 * d0 + d2 * d2;
-    }
+    @Override
+    public boolean canUse(DroneTasks task) {
+        return this.drone.getOwner() != null && this.drone.getOwner().getPlayer() != null && super.canUse(task);
+    } 
 
     public void tick() {
-        this.mob.getLookControl().setLookAt(this.player, (float) (this.mob.getMaxHeadYRot() + 20),
-                (float) this.mob.getMaxHeadXRot());
+        if (!this.canUse(TYPE)) return;
+        Player player = this.drone.getOwner().getPlayer();
+        this.drone.getLookControl().setLookAt(player);
 
         // Actual movement
-        Vec3 playerPos = new Vec3(this.player.getX(), this.player.getY() + 2.0D, this.player.getZ());
-        Vec3 mobPos = this.mob.position();
+        Vec3 playerPos = new Vec3(player.getX(), player.getY() + 2.0D, player.getZ());
+        Vec3 mobPos = this.drone.position();
 
-        boolean isNearPlayer = distanceToSqr2D(playerPos.x, playerPos.z) < 1.5D;
+        boolean isNearPlayer = DroneUtils.distanceToSqr2D(this.drone, playerPos.x, playerPos.z) < 1.5D;
         boolean isUnderPlayer = mobPos.y - playerPos.y < 0.3D;
-        boolean isHittingPlayer = distanceToSqr2D(playerPos.x, playerPos.z) < 1D;
+        boolean isHittingPlayer = DroneUtils.distanceToSqr2D(this.drone, playerPos.x, playerPos.z) < 1D;
 
         // spagetti
         boolean isBehind = mobPos.x < playerPos.x;
@@ -52,17 +44,16 @@ public class FollowOwnerTask extends Goal {
         int signZ = isToTheLeft ? -1 : 1;
 
         if (isHittingPlayer) {
-            this.mob.getNavigation().moveTo(mobPos.x + (1.5D * signX), playerPos.y + 0.5D, mobPos.z + (1.0 * signZ),
+            this.drone.getNavigation().moveTo(mobPos.x + (1.5D * signX), playerPos.y + 0.5D, mobPos.z + (1.0 * signZ),
                     1.0D);
         } else if (isNearPlayer && !isUnderPlayer) {
-            this.mob.getNavigation().stop();
+            this.drone.getNavigation().stop();
 
         } else if (isNearPlayer && isUnderPlayer) {
-            this.mob.getNavigation().moveTo(mobPos.x, playerPos.y + 0.5D, mobPos.z, 1.0D);
+            this.drone.getNavigation().moveTo(mobPos.x, playerPos.y + 0.5D, mobPos.z, 1.0D);
         } else {
-            this.mob.getNavigation().moveTo(playerPos.x + (1.5D * signX), playerPos.y + 0.5D,
+            this.drone.getNavigation().moveTo(playerPos.x + (1.5D * signX), playerPos.y + 0.5D,
                     playerPos.z + (1.5D * signZ), 1.0D);
         }
-
     }
 }

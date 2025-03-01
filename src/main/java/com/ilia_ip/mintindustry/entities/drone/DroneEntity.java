@@ -1,10 +1,13 @@
 package com.ilia_ip.mintindustry.entities.drone;
 
+import java.util.List;
 
 import com.ilia_ip.mintindustry.core.ModSounds;
 import com.ilia_ip.mintindustry.entities.drone.tasks.FollowOwnerTask;
+import com.ilia_ip.mintindustry.entities.drone.tasks.RechargeTask;
 import com.ilia_ip.mintindustry.util.DroneOwner;
 import com.ilia_ip.mintindustry.util.DroneUtils;
+import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -31,32 +34,61 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public class DroneEntity extends PathfinderMob implements FlyingAnimal {
-    public DroneOwner owner;
-    public float propellerSpeed;
-    public DroneTask currentTask;
+    private DroneOwner owner;
 
-    
+    // Some data
+    private float propellerSpeed;
+    private float powerLevel;
+
+    // Task system
+    private DroneTask currentTask;
+    private DroneTasks currentTaskType;
+    private List<DroneTask> tasks;
 
     public DroneEntity(EntityType<DroneEntity> type, Level level) {
         super(type, level);
         this.moveControl = new FlyingMoveControl(this, 65, true);
-        this.currentTask = DroneTask.IDLE;
+        this.currentTaskType = DroneTasks.FOLLOWING_PLAYER;
         this.propellerSpeed = 0;
+        this.powerLevel = 0;
+        this.tasks = List.of(new FollowOwnerTask(this), new RechargeTask(this));
+        this.currentTask = this.tasks.get(0);
     }
 
-    public void setTask(DroneTask task) {
-        this.currentTask = task;
+    // New method
+    public void setTask(DroneTasks task) {
+        this.currentTaskType = task;
     }
 
-    /* 
-     * Getting DroneOwner
-     */    
+    // New method
+    public DroneOwner getOwner() {
+        return this.owner;
+    }
+
+    // New method
+    public float getPropellerSpeed() {
+        return this.propellerSpeed;
+    }
+
+    // New method
+    public float getPowerLevel() {
+        return this.powerLevel;
+    }
+
+    // New method
+    public void setPowerLevel(float powerLevel) {
+        this.powerLevel = powerLevel;
+    }
+
+    // New method 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor server, DifficultyInstance difficulty, MobSpawnType spawnType, SpawnGroupData spawnData, CompoundTag compound) {
         this.owner = DroneOwner.getOwner(this.level(), this);
         return spawnData;
     }
- 
+
+    // New method
+    @Override
     protected PathNavigation createNavigation(Level level) {
         FlyingPathNavigation flyingpathnavigation = new FlyingPathNavigation(this, level);
         flyingpathnavigation.setCanOpenDoors(true);
@@ -65,27 +97,50 @@ public class DroneEntity extends PathfinderMob implements FlyingAnimal {
         return flyingpathnavigation;
     }
 
+    // New method
     @Override
     public void tick() {
-        if (this.propellerSpeed < 20) {
-            this.propellerSpeed += 0.2;
+        LogUtils.getLogger().atWarn().log("DRONE ENTITY LOG [ prop speed: " + this.propellerSpeed + " power: " + this.powerLevel + " task: " + this.currentTaskType + " ]");
+        if (this.propellerSpeed < DroneUtils.MAX_PROPELLER_SPEED && this.powerLevel > 5) {
+            this.propellerSpeed += 0.05;
+        } else if (this.powerLevel < 5 && this.propellerSpeed > 0) {
+            this.propellerSpeed -= 0.05;
         }
 
-        // Playes sound with volume based on propeller speed (from 0.01 to 0.10)
+        if (this.powerLevel > 0)this.powerLevel -= this.propellerSpeed/1000;
+
+        // Plays sound with volume based on propeller speed (from 0.01 to 0.10)
         this.playSound(ModSounds.DRONE_ENGINE_LOOP.get(),
                     (this.propellerSpeed/2)*0.01f, 1.0f);
+
+
+        if (!this.currentTask.canContinueToUse(currentTaskType)) {
+            LogUtils.getLogger().atWarn().log("sadsadsadasdsd ssd sa dasd asd ds dsd sd ");
+            int maxPriority = 0;
+            currentTaskType = DroneTasks.IDLE;
+            for (DroneTask task : tasks) {
+                if (task.canUse(currentTaskType) && task.PRIORITY > maxPriority) {
+                    currentTask = task;
+                    maxPriority = task.PRIORITY;
+                    currentTaskType = task.TYPE;
+                    LogUtils.getLogger().atWarn().log("SDSDADASDSD FAFFSFSF");
+                }
+            }
+        }        
+        currentTask.tick();
+        
         super.tick();
     }
 
     public boolean canFly() {
-        return this.propellerSpeed > 18;
+        return this.propellerSpeed > (DroneUtils.MAX_PROPELLER_SPEED-5) && this.powerLevel > 5;
     }
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new FollowOwnerTask(this));
     }
 
+    // New method
     public static AttributeSupplier.Builder createMobAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0f).add(Attributes.FLYING_SPEED, 3.0f)
                 .add(Attributes.MOVEMENT_SPEED, 0.3f);
@@ -124,7 +179,7 @@ public class DroneEntity extends PathfinderMob implements FlyingAnimal {
     public void readAdditionalSaveData(CompoundTag tag) {
         owner = DroneOwner.byUUID(this.level(), tag.getUUID("owner_uuid"));
         propellerSpeed = tag.getFloat("propeller_speed");
-        currentTask = DroneTask.values()[tag.getInt("drone_task")];
+        currentTaskType = DroneTasks.values()[tag.getInt("drone_task")];
         super.readAdditionalSaveData(tag);
     }
 
@@ -132,7 +187,7 @@ public class DroneEntity extends PathfinderMob implements FlyingAnimal {
     public void addAdditionalSaveData(CompoundTag tag) {
         tag.putUUID("owner_uuid", owner.getUUID());
         tag.putFloat("propeller_speed", propellerSpeed);
-        tag.putInt("drone_task", currentTask.value);
+        tag.putInt("drone_task", currentTaskType.value);
         super.addAdditionalSaveData(tag);
     }
 
@@ -141,13 +196,12 @@ public class DroneEntity extends PathfinderMob implements FlyingAnimal {
         return !this.onGround();
     }
 
-    /* 
-     * Drone is flying entity, so no fall damage should be applied
-     */
+    // New method
     @Override
     protected void checkFallDamage(double p_20990_, boolean p_20991_, BlockState p_20992_, BlockPos p_20993_) {
     }
 
+    // New method
     @Override
     public boolean canBeLeashed(Player p_21418_) {
         return false;
